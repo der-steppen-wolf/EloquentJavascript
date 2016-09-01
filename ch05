@@ -1,0 +1,112 @@
+```javascript
+/* Flattening */
+
+var arrays = [[1, 2, 3], [4, 5], [6]];
+
+console.log(arrays.reduce(function(flattenedArray, cur) {
+	return flattenedArray.concat(cur);
+}));
+
+// → [1, 2, 3, 4, 5, 6]
+
+
+/* Mother-child age difference */
+
+function average(array) {
+  function plus(a, b) { return a + b; }
+  return array.reduce(plus) / array.length;
+}
+
+function hasMother(person) {
+  return byName[person.mother] != null;
+}
+
+function ageDiff(person) {
+	return Math.abs(byName[person.mother].born - person.born);
+}
+
+var byName = {};
+ancestry.forEach(function(person) {
+  byName[person.name] = person;
+});
+
+console.log(average(ancestry.filter(hasMother).map(ageDiff)));
+
+// → 31.2
+
+
+/* Historical life expectancy */
+
+function average(array) {
+  function plus(a, b) { return a + b; }
+  return array.reduce(plus) / array.length;
+}
+
+function age(person) {
+	return person.died - person.born;
+}
+
+function century(person) {
+  return Math.ceil(person.died / 100);
+}
+
+function hasValue(obj, key, value) {
+	return obj.hasOwnProperty(key) && obj[key] === value;
+}
+
+function GroupArrayByCentury() {
+	var centuryAges = [];
+  
+	ancestry.forEach(function(person) {
+		if (!centuryAges.some(function(obj) { return hasValue(obj, "century", century(person)); }))
+          	 centuryAges.push({century: century(person), ageArray: [age(person)]});
+    	else
+     		 centuryAges.forEach(function(obj) {
+               if (obj.century === century(person))
+              		obj.ageArray.push(age(person));
+             });
+	});
+  
+  	return centuryAges;
+}
+
+GroupArrayByCentury().forEach(function(obj) {
+	console.log(obj.century + ": " + average(obj.ageArray) + "\n");
+});
+
+
+// → 16: 43.5
+//   17: 51.2
+//   18: 52.8
+//   19: 54.8
+//   20: 84.7
+//   21: 94
+
+
+/* Every and then some */
+
+function every(array, predicate) {
+	for (var i = 0; i < array.length; i++) {
+    	if (!predicate(array[i]))
+          return false;
+    }
+  	return true;
+}
+
+function some(array, predicate) {
+	for (var i = 0; i < array.length; i++) {
+    	if (predicate(array[i]))
+        	return true;
+    }
+    return false;
+}
+
+console.log(every([NaN, NaN, NaN], isNaN));
+// → true
+console.log(every([NaN, NaN, 4], isNaN));
+// → false
+console.log(some([NaN, 3, 4], isNaN));
+// → true
+console.log(some([2, 3, 4], isNaN));
+// → false
+```
